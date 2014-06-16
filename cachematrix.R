@@ -1,8 +1,13 @@
 ## Create an object that will speed up the delivery of the invert
 ## of a matrix using lexical scoping.
-## Usage : v <- makeCacheMatrix
-##         v$set(my_matrix)
-##         cacheSolve(v)
+## Usage : 
+# > v <- makeCacheMatrix()
+# > v$set(matrix(rnorm(1000000),1000,1000))
+# > inverted_m <- cacheSolve(v)
+# Computed inverted matrix in 2.169 (secs)
+# > inverted_m <- cacheSolve(v)
+# getting cached matrix in 0 (secs)
+
 
 ## Create the matrix cache object, which is basically the cached computation
 ## of a matrix + a set of 4 functions: a getter and a setter, and cache getter 
@@ -37,11 +42,15 @@ makeCacheMatrix <- function(x = matrix()) {
 ## computation (if already computed and original matrix didn't change meanwhile) or 
 ## or computes the invert and stores it for further usage. 
 cacheSolve <- function(x, ...) {
+        start_time <- Sys.time()
         ## Look for a cached computation
         cachedMatrix <- x$getCachedMatrix()
         if (!is.null(cachedMatrix)) {
                 ## if cached computation is available, returns it
-                message("getting cached matrix")
+                end_time <- Sys.time()
+                message(paste("getting cached matrix in",
+                              round(end_time-start_time,3),
+                              "(secs)"))
                 return(cachedMatrix)
         }
         ## if cached computation is not available, get the original matrix
@@ -55,6 +64,11 @@ cacheSolve <- function(x, ...) {
         cachedMatrix <- solve(data)
         ## store the inverted matrix
         x$setCachedMatrix(cachedMatrix)
+        ## benchmark it
+        end_time <- Sys.time()
+        message(paste("Computed inverted matrix in",
+                      round(end_time-start_time,3),
+                      "(secs)"))
         ## return the inverted matrix
         cachedMatrix
 }
