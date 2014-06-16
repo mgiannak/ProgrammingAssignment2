@@ -14,7 +14,7 @@ makeCacheMatrix <- function(x = matrix()) {
         set <- function(y) {
                 x <<- y
                 ## reset the cache
-                ## we could also recompute directly the cache
+                ## we could also recompute directly the cache..
                 cachedMatrix <<- NULL
         }
         ## getter
