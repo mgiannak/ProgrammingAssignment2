@@ -57,8 +57,12 @@ cacheSolve <- function(x, ...) {
         data <- x$get()
         ## verify this is a square (invertible) matrix
         if (nrow(data) != ncol(data)){
-                warning("matrix is not invertible")
-                stop()
+                warning("matrix is not square. Returning NULL")
+                return(NULL)
+        }
+        if (det(data) == 0){
+                warning("matrix is singular. Returning NULL")
+                return(NULL)
         }
         ## compute the inverted matrix
         cachedMatrix <- solve(data)
